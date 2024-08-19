@@ -2,7 +2,7 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.jetbrains.kotlin.android)
   alias(libs.plugins.kotlinSerialization)
-  id("kotlin-kapt")
+  alias(libs.plugins.ksp)
 }
 
 android {
@@ -34,7 +34,7 @@ android {
 dependencies {
   implementation(libs.androidx.room.runtime)
   implementation(libs.androidx.room.ktx)
-  kapt(libs.androidx.room.compiler)
+  ksp(libs.androidx.room.compiler)
 
   implementation(libs.kotlinx.serialization)
   implementation(libs.koin.core)
