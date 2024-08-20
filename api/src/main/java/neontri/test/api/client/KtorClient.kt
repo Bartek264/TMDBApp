@@ -17,10 +17,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
-object KtorClient {
-
-  private const val BASE_URL = "https://api.themoviedb.org/3/"
-  private const val TAG = "KtorClient"
+class KtorClient {
 
   operator fun invoke() = HttpClient(Android) {
     setLogging()
@@ -61,5 +58,9 @@ object KtorClient {
     }
   }
 
-  private const val API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MTMxNGY5NTMyOWYwZmEyZWQyNWY3ZmYxNTY4NGNhZiIsIm5iZiI6MTcyMzczMjM1OC4xOTc2MTMsInN1YiI6IjYzMDA4NWM1ODM5ZDkzMDA3ZTRiZjhlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IYPRikPWWLDKUqQCgZnihOpsraXq7R0jk-meAGlKZvQ"
+  companion object {
+    private const val API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MTMxNGY5NTMyOWYwZmEyZWQyNWY3ZmYxNTY4NGNhZiIsIm5iZiI6MTcyMzczMjM1OC4xOTc2MTMsInN1YiI6IjYzMDA4NWM1ODM5ZDkzMDA3ZTRiZjhlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IYPRikPWWLDKUqQCgZnihOpsraXq7R0jk-meAGlKZvQ"
+    private const val BASE_URL = "https://api.themoviedb.org/3/"
+    private const val TAG = "KtorClient"
+  }
 }

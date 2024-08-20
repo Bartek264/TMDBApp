@@ -1,9 +1,9 @@
 package neontri.test.tmdbapp.repository
 
 import kotlinx.coroutines.flow.Flow
-import neontri.test.api.model.detail.MovieDetailResponse
-import neontri.test.api.model.preview.MovieResponse
-import neontri.test.api.model.search.MovieSearchResponse
+import neontri.test.api.domain.model.detail.MovieDetailResponse
+import neontri.test.api.domain.model.preview.MovieResponse
+import neontri.test.api.domain.model.search.MovieSearchResponse
 import neontri.test.local.entity.FavoriteMovieEntity
 
 interface MovieRepository {

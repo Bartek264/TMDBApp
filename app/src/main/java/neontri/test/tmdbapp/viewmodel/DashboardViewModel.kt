@@ -3,6 +3,7 @@ package neontri.test.tmdbapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -14,26 +15,29 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import neontri.test.api.model.preview.MoviePreviewResponse
-import neontri.test.tmdbapp.domain.GetMoviePreviewUseCase
-import neontri.test.tmdbapp.domain.GetMovieSearchUseCase
-import neontri.test.tmdbapp.domain.SetFavoriteMovieUseCase
-import neontri.test.tmdbapp.model.MoviePreviewModel
-import neontri.test.tmdbapp.repository.MovieRepository
-import neontri.test.tmdbapp.screens.dashboard.state.DashboardEffect
-import neontri.test.tmdbapp.screens.dashboard.state.DashboardEvents
-import neontri.test.tmdbapp.screens.dashboard.state.DashboardViewState
+import neontri.test.api.domain.model.preview.MoviePreviewResponse
+import neontri.test.tmdbapp.domain.model.MoviePreviewModel
+import neontri.test.tmdbapp.domain.usecase.dashboard.GetMoviePreviewUseCase
+import neontri.test.tmdbapp.domain.usecase.dashboard.GetMovieSearchUseCase
+import neontri.test.tmdbapp.domain.usecase.favorite.DeleteFavoriteMovieUseCase
+import neontri.test.tmdbapp.domain.usecase.favorite.GetFavoriteMoviesUseCase
+import neontri.test.tmdbapp.domain.usecase.favorite.SetFavoriteMovieUseCase
+import neontri.test.tmdbapp.ui.screens.dashboard.state.DashboardEffect
+import neontri.test.tmdbapp.ui.screens.dashboard.state.DashboardEvents
+import neontri.test.tmdbapp.ui.screens.dashboard.state.DashboardViewState
 import neontri.test.tmdbapp.services.ConnectivityObserver
 import neontri.test.tmdbapp.util.formatTMDBImageUrl
 import neontri.test.tmdbapp.util.mvi.EventHandler
 import neontri.test.tmdbapp.util.roundToTwoDecimalPlaces
 
 class DashboardViewModel(
-  private val movieRepository: MovieRepository,
   private val connectivityObserver: ConnectivityObserver,
   private val getMovieSearchUseCase: GetMovieSearchUseCase,
   private val getMoviePreviewUseCase: GetMoviePreviewUseCase,
-  private val setFavoriteMovieUseCase: SetFavoriteMovieUseCase
+  private val setFavoriteMovieUseCase: SetFavoriteMovieUseCase,
+  private val getFavoriteMovieUseCase: GetFavoriteMoviesUseCase,
+  private val deleteFavoriteMovieUseCase: DeleteFavoriteMovieUseCase,
+  private val backgroundDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel(), EventHandler<DashboardEvents> {
 
   private val _viewState = MutableStateFlow(DashboardViewState())
@@ -46,7 +50,7 @@ class DashboardViewModel(
     initData()
   }
 
-  private fun initData() = viewModelScope.launch(Dispatchers.IO) {
+  private fun initData() = viewModelScope.launch(backgroundDispatcher) {
     _viewState.update { it.copy(isLoading = true) }
 
     connectivityObserver.status.map { isConnected ->
@@ -69,7 +73,7 @@ class DashboardViewModel(
     reloadFavoriteMovies()
   }
 
-  private fun loadNextPage() = viewModelScope.launch(Dispatchers.IO) {
+  private fun loadNextPage() = viewModelScope.launch(backgroundDispatcher) {
     val nextPage = _viewState.value.lastLoadedPage + 1
     getMoviePreviewUseCase(nextPage).let { result ->
       if (result.isSuccess) {
@@ -100,7 +104,7 @@ class DashboardViewModel(
   }
 
   override fun obtainEvent(event: DashboardEvents) {
-    viewModelScope.launch(Dispatchers.IO) {
+    viewModelScope.launch(backgroundDispatcher) {
       when (event) {
         is DashboardEvents.OnFavoriteClick -> {
           changeFavoriteStatus(event.moviePreviewResponse)
@@ -134,7 +138,7 @@ class DashboardViewModel(
     }
   }
 
-  private fun changeFavoriteStatus(movie: MoviePreviewResponse) = viewModelScope.launch(Dispatchers.IO) {
+  private fun changeFavoriteStatus(movie: MoviePreviewResponse) = viewModelScope.launch(backgroundDispatcher) {
     _viewState.update { state ->
       state.copy(movies = state.movies.map { movieItem ->
         when (movieItem.moviePreviewResponse.id) {
@@ -143,7 +147,7 @@ class DashboardViewModel(
             if (newFavoriteStatus) {
               setFavoriteMovieUseCase(movieItem.moviePreviewResponse)
             } else {
-              movieRepository.deleteFavoriteMovie(movieId = movie.id)
+              deleteFavoriteMovieUseCase(movieId = movie.id)
             }
             movieItem.copy(isFavorite = newFavoriteStatus)
           }
@@ -156,7 +160,7 @@ class DashboardViewModel(
     }
   }
 
-  private fun updateSearchList() = viewModelScope.launch(Dispatchers.IO) {
+  private fun updateSearchList() = viewModelScope.launch(backgroundDispatcher) {
     delay(SEARCH_MODE_DELAY)
     val nextPage = _viewState.value.searchModeLastLoadedPage + 1
     _viewState.update {
@@ -167,8 +171,8 @@ class DashboardViewModel(
     }
   }
 
-  private fun reloadFavoriteMovies() = viewModelScope.launch(Dispatchers.IO) {
-    movieRepository.getFavoriteMovies().map { favoriteMovies ->
+  private fun reloadFavoriteMovies() = viewModelScope.launch(backgroundDispatcher) {
+    getFavoriteMovieUseCase().map { favoriteMovies ->
       var movies = _viewState.value.movies
       movies = movies.map { movie -> movie.copy(isFavorite = favoriteMovies.find { it.movieId == movie.moviePreviewResponse.id } != null) }
       _viewState.update { it.copy(movies = movies) }

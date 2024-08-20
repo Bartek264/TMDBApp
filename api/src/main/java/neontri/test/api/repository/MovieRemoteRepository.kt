@@ -1,8 +1,8 @@
 package neontri.test.api.repository
 
-import neontri.test.api.model.detail.MovieDetailResponse
-import neontri.test.api.model.preview.MovieResponse
-import neontri.test.api.model.search.MovieSearchResponse
+import neontri.test.api.domain.model.detail.MovieDetailResponse
+import neontri.test.api.domain.model.preview.MovieResponse
+import neontri.test.api.domain.model.search.MovieSearchResponse
 
 interface MovieRemoteRepository {
   suspend fun getPopularMovies(page: Int): Result<MovieResponse>

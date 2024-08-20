@@ -5,9 +5,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import neontri.test.tmdbapp.screens.dashboard.DashboardScreen
-import neontri.test.tmdbapp.screens.detail.DetailScreen
-import neontri.test.tmdbapp.screens.favorite.FavoriteScreen
+import neontri.test.tmdbapp.ui.screens.dashboard.DashboardScreen
+import neontri.test.tmdbapp.ui.screens.detail.DetailScreen
+import neontri.test.tmdbapp.ui.screens.favorite.FavoriteScreen
 
 @Composable
 fun NavigationController() {

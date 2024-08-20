@@ -1,12 +1,12 @@
 package neontri.test.tmdbapp.util
 
-import neontri.test.api.model.detail.BelongsToCollection
-import neontri.test.api.model.detail.Genre
-import neontri.test.api.model.detail.MovieDetailResponse
-import neontri.test.api.model.detail.ProductionCompany
-import neontri.test.api.model.detail.ProductionCountry
-import neontri.test.api.model.detail.SpokenLanguage
-import neontri.test.api.model.preview.MoviePreviewResponse
+import neontri.test.api.domain.model.detail.BelongsToCollection
+import neontri.test.api.domain.model.detail.Genre
+import neontri.test.api.domain.model.detail.MovieDetailResponse
+import neontri.test.api.domain.model.detail.ProductionCompany
+import neontri.test.api.domain.model.detail.ProductionCountry
+import neontri.test.api.domain.model.detail.SpokenLanguage
+import neontri.test.api.domain.model.preview.MoviePreviewResponse
 
 fun provideMoviePreview(): MoviePreviewResponse {
   return MoviePreviewResponse(
