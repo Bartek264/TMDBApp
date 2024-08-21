@@ -9,11 +9,10 @@ import neontri.test.tmdbapp.domain.usecase.favorite.SetFavoriteMovieUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-  single { GetMovieSearchUseCase(get()) }
-  single { GetMovieDetailsUseCase(get()) }
-  single { GetMoviePreviewUseCase(get()) }
-  single { SetFavoriteMovieUseCase(get()) }
-  single { GetFavoriteMoviesUseCase(get()) }
-  single { DeleteFavoriteMovieUseCase(get()) }
-
+  factory { GetMovieSearchUseCase(get()) }
+  factory { GetMovieDetailsUseCase(get()) }
+  factory { GetMoviePreviewUseCase(get()) }
+  factory { SetFavoriteMovieUseCase(get()) }
+  factory { GetFavoriteMoviesUseCase(get()) }
+  factory { DeleteFavoriteMovieUseCase(get()) }
 }
