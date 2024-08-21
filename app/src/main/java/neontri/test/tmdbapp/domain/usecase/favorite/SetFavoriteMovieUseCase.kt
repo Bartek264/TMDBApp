@@ -23,11 +23,11 @@ class SetFavoriteMovieUseCase(private val repository: MovieRepository) {
   suspend operator fun invoke(moviePreviewResponse: MoviePreviewResponse) {
     val entity = FavoriteMovieEntity(
       movieId = moviePreviewResponse.id,
-      posterPath = moviePreviewResponse.poster_path,
+      posterPath = moviePreviewResponse.posterPath,
       title = moviePreviewResponse.title,
-      releaseDate = moviePreviewResponse.release_date,
-      voteAverage = moviePreviewResponse.vote_average,
-      voteCount = moviePreviewResponse.vote_count
+      releaseDate = moviePreviewResponse.releaseDate,
+      voteAverage = moviePreviewResponse.voteAverage,
+      voteCount = moviePreviewResponse.voteCount
     )
 
     repository.insertNewFavoriteMovie(entity)

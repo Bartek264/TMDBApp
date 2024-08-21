@@ -55,7 +55,7 @@ fun DashboardItem(
           .fillMaxHeight()
           .aspectRatio(2f / 3f),
         model = ImageRequest.Builder(context)
-          .data(moviePreviewModel.moviePreviewResponse.poster_path)
+          .data(moviePreviewModel.moviePreviewResponse.posterPath)
           .build(),
         contentDescription = null,
         contentScale = ContentScale.Fit
@@ -77,13 +77,13 @@ fun DashboardItem(
         )
         Text(
           modifier = Modifier.weight(1f),
-          text = moviePreviewModel.moviePreviewResponse.release_date,
+          text = moviePreviewModel.moviePreviewResponse.releaseDate,
           fontWeight = FontWeight.W400,
           fontSize = 14.sp
         )
         Text(
           modifier = Modifier.weight(1f),
-          text = "${moviePreviewModel.moviePreviewResponse.vote_average} (${moviePreviewModel.moviePreviewResponse.vote_count})",
+          text = "${moviePreviewModel.moviePreviewResponse.voteAverage} (${moviePreviewModel.moviePreviewResponse.voteCount})",
           fontWeight = FontWeight.W500,
           fontSize = 16.sp
         )

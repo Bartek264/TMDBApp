@@ -90,8 +90,8 @@ class DashboardViewModel(
     val updatedList = movieList.map { movie ->
       movie.copy(
         moviePreviewResponse = movie.moviePreviewResponse.copy(
-          poster_path = movie.moviePreviewResponse.poster_path?.let { formatTMDBImageUrl(it) },
-          vote_average = movie.moviePreviewResponse.vote_average.roundToTwoDecimalPlaces()
+          posterPath = movie.moviePreviewResponse.posterPath?.let { formatTMDBImageUrl(it) },
+          voteAverage = movie.moviePreviewResponse.voteAverage.roundToTwoDecimalPlaces()
         )
       )
     }
